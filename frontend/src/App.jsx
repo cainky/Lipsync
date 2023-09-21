@@ -11,7 +11,6 @@ function App() {
 
     const [errorMessage, setErrorMessage] = useState(null);
 
-
     useEffect(() => {
         // Cleanup function
         return () => {
@@ -51,6 +50,10 @@ function App() {
             setErrorMessage("An error occurred during merging. Please try again.");
         }
     }
+
+    const handleStartRecording = (type) => {
+        setActiveRecorder(type);
+    };
     
 
     const handleRecordingStop = (type, url) => {
@@ -81,7 +84,7 @@ function App() {
                         <button 
                             onClick={() => {
                                 setErrorMessage(null);
-                                setActiveRecorder('audio');
+                                handleStartRecording('audio');
                             }}
                             className="bg-secondary hover:bg-secondary-hover text-white font-bold py-2 px-4 rounded"
                         >
@@ -91,7 +94,7 @@ function App() {
                         <button 
                             onClick={() => {
                                 setErrorMessage(null);
-                                setActiveRecorder('video');
+                                handleStartRecording('video');
                             }}
                             className="bg-secondary hover:bg-secondary-hover text-white font-bold py-2 px-4 rounded"
                         >

@@ -36,8 +36,7 @@ function StatusDisplay({ status, type }) {
 
 StatusDisplay.propTypes = {
     status: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['audio', 'video']).isRequired,
-    recordingDuration: PropTypes.number.isRequired
+    type: PropTypes.oneOf(['audio', 'video']).isRequired
 };
 
 export default StatusDisplay;

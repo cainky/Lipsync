@@ -39,7 +39,7 @@ function Recorder({ type, onRecordingStop }) {
     return (
         <div className="bg-darkContent p-5 rounded shadow-lg">
             <StatusDisplay status={status} type={type} />
-
+   
             <div className="flex space-x-4 mt-4">
                 <RecordButton type={type} onClick={startRecording} />
                 <StopButton onClick={handleStop} />
