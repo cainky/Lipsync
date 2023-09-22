@@ -1,0 +1,32 @@
+# Use the official Node.js 14 image from DockerHub
+FROM node:14
+
+# Set the working directory
+WORKDIR /frontend
+
+# Copy the `package.json` and `package-lock.json`
+COPY package*.json ./
+
+# Install the project dependencies
+RUN npm install
+
+# Copy the rest of your app's source code from your host to your image filesystem.
+COPY . .
+
+# Build the app
+RUN npm run build
+
+# Use a smaller image for serving the built frontend
+FROM nginx:alpine
+
+# Set the working directory
+WORKDIR /usr/share/nginx/html
+
+# Copy the build from the previous image
+COPY --from=0 /frontend/dist .
+
+# Expose port 80 for the app
+EXPOSE 80
+
+# Start the app
+CMD ["nginx", "-g", "daemon off;"]
