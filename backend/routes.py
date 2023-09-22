@@ -1,8 +1,7 @@
 import os
 from flask import jsonify, request, send_from_directory
-
-from services import merge_service
-
+from pathlib import Path
+from services.merge_service import merge_audio_video
 
 ALLOWED_EXTENSIONS = {"mp4", "wav", "webm"}
 
@@ -34,18 +33,20 @@ def init_app(app):
             and allowed_file(video_file.filename)
         ):
             try:
-                video_path = merge_service.merge_audio_video(
+                video_path = merge_audio_video(
                     audio_file, video_file, app.config["UPLOAD_FOLDER"]
                 )
-                if not video_path:
-                    video_path = "output.mp4"
-
                 output_path = "/uploads/" + os.path.basename(video_path)
-
-                return (
-                    jsonify(videoPath=output_path),
-                    200,
-                )
+                if Path(output_path).is_file():
+                    return (
+                        jsonify(videoPath=output_path),
+                        200,
+                    )
+                else:
+                    return (
+                        jsonify(error="Output file not found."),
+                        404,
+                    )
             except Exception as e:
                 return jsonify(error=str(e)), 500
         return jsonify(error="File type not allowed"), 400
