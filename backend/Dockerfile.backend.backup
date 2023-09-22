@@ -1,3 +1,5 @@
+# Backup dockerfile for seperate backend, incase we need to split wav2lip into its own image
+
 FROM python:3.9-slim-buster
 
 ENV DEBIAN_FRONTEND=noninteractive \
