@@ -1,14 +1,20 @@
 from flask import Flask
 from flask_cors import CORS
+import os
 
 
 def create_app():
     app = Flask(__name__)
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-    CORS(app)
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    UPLOADS_DIR = os.path.join(BASE_DIR, "uploads")
+    app.config["BASE_DIR"] = BASE_DIR
+    app.config["UPLOADS_DIR"] = UPLOADS_DIR
 
-    from .routes import main as main_blueprint
+    # Register routes
+    from routes import init_app as init_routes
 
-    app.register_blueprint(main_blueprint)
+    init_routes(app)
 
     return app

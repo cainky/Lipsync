@@ -12,8 +12,6 @@ class TestMergeService(unittest.TestCase):
         self.sample_video_file = MagicMock(spec=["filename", "save"])
         self.sample_video_file.filename = "test_video.webm"
 
-        self.upload_folder = "/tmp"
-
     @patch("os.path.exists", return_value=True)
     @patch("os.remove")
     @patch("subprocess.run")
@@ -21,7 +19,7 @@ class TestMergeService(unittest.TestCase):
         mock_run.return_value = MagicMock(returncode=0)
 
         output_path = merge_service.merge_audio_video(
-            self.sample_audio_file, self.sample_video_file, self.upload_folder
+            self.sample_audio_file, self.sample_video_file
         )
 
         self.assertTrue("output.mp4" in output_path)
@@ -36,7 +34,7 @@ class TestMergeService(unittest.TestCase):
 
         with self.assertRaises(Exception) as context:
             merge_service.merge_audio_video(
-                self.sample_audio_file, self.sample_video_file, self.upload_folder
+                self.sample_audio_file, self.sample_video_file
             )
 
         self.assertTrue(

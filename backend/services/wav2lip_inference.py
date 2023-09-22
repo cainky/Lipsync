@@ -1,9 +1,10 @@
 import subprocess
 import os
+from utils import get_uploads_dir
 
-CHECKPOINT_PATH = "wav2lip-hq/checkpoints/wav2lip_gan.pth"
-SEGMENTATION_PATH = "wav2lip-hq/checkpoints/face_segmentation.pth"
-SR_PATH = "wav2lip-hq/checkpoints/esrgan_max.pth"
+CHECKPOINT_PATH = os.path.join("checkpoints", "wav2lip_gan.pth")
+SEGMENTATION_PATH = os.path.join("checkpoints", "face_segmentation.pth")
+SR_PATH = os.path.join("checkpoints", "esrgan_max.pth")
 
 
 def run_command(cmd, workdir=None):
@@ -51,10 +52,10 @@ def run_wav2lip_inference(face_path, audio_path, outfile_path):
     face_path = convert_to_mp4(face_path)
 
     # DEBUG TEMP
-    trimmed_face_path = "uploads/trimmed_face.mp4"
-    trimmed_audio_path = "uploads/trimmed_audio.wav"
-    trim_video(face_path, trimmed_face_path, 0, 1)
-    trim_audio(audio_path, trimmed_audio_path, 0, 1)
+    trimmed_face_path = os.path.join(get_uploads_dir(), "trimmed_face.mp4")
+    trimmed_audio_path = os.path.join(get_uploads_dir(), "trimmed_audio.wav")
+    trim_video(face_path, trimmed_face_path, 0, 5)
+    trim_audio(audio_path, trimmed_audio_path, 0, 5)
     face_path = trimmed_face_path
     audio_path = trimmed_audio_path
     print("Starting Wav2Lip inference...")
@@ -64,7 +65,7 @@ def run_wav2lip_inference(face_path, audio_path, outfile_path):
 
     cmd = [
         "python",
-        "wav2lip-hq/inference.py",
+        "inference.py",
         "--face",
         face_path,
         "--audio",
