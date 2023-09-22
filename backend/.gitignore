@@ -1,6 +1,7 @@
 uploads/*.webm
 uploads/*.wav
 uploads/*.mp4
+uploads/*.avi
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

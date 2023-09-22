@@ -15,7 +15,9 @@ def merge_audio_video(audio_file, video_file, upload_folder):
     video_file.save(video_path)
 
     try:
-        run_wav2lip_inference(face=video_path, audio=audio_path, outfile=output_path)
+        run_wav2lip_inference(
+            face_path=video_path, audio_path=audio_path, outfile_path=output_path
+        )
     except Exception:
         # Cleanup in case of failure
         if os.path.exists(audio_path):
