@@ -41,6 +41,13 @@ A simple GUI app to synchronize recorded audio with video lip movements using th
    npm run dev
    ```
 
+## Docker
+- In the root project directory, run
+```bash
+docker-compose build
+```
+
+
 ## Usage
 
 1. **Record Audio**: Click the 'Record Audio' button and speak into your microphone.

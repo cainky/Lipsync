@@ -1,0 +1,33 @@
+# Ignore virtual environments and Python cache files
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.venv/
+.venv.bak/
+venv/
+venv.bak/
+
+# Ignore logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Ignore system files
+.DS_Store
+.Thumbs.db
+
+# Ignore git files
+.git/
+.gitignore
+
+# Ignore all markdown files (like README)
+*.md
+
+# Ignore configuration and test files
+*.cfg
+*.ini
+*.yml
+*.json
+test/
+tests/
