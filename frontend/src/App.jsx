@@ -74,8 +74,7 @@ function App() {
         const formData = new FormData();
         formData.append("audio", audioBlob, "audio.webm");
         formData.append("video", videoBlob, "video.webm");
-        
-        console.log(audioBlob.size, videoBlob.size)
+    
         try {
             const response = await axios.post(BACKEND_URL+'/api/merge', formData, {
                 headers: {

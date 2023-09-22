@@ -9,7 +9,7 @@ function Recorder({ type, onRecordingStop }) {
     const [status, setStatus] = useState("idle");
     const videoRef = useRef(null);
     const [mediaRecorder, setMediaRecorder] = useState(null);
-    const [chunks, setChunks] = useState([]);
+    const [, setChunks] = useState([]);
     const [recordedBlob, setRecordedBlob] = useState(null);
     
     useEffect(() => {
@@ -28,7 +28,6 @@ function Recorder({ type, onRecordingStop }) {
                 const recorder = new MediaRecorder(stream, { mimeType: mimeType });
     
                 recorder.ondataavailable = event => {
-                    console.log("Data available with size:", event.data.size);
                     setChunks(prev => [...prev, event.data]);
                 };
     
@@ -66,7 +65,6 @@ function Recorder({ type, onRecordingStop }) {
     };
 
     const handleStop = () => {
-        console.log("Stop function called. MediaRecorder state:", mediaRecorder?.state);
         if (mediaRecorder && mediaRecorder.state !== "inactive") {
             mediaRecorder.stop();
             if (type === 'video' && videoRef.current && videoRef.current.srcObject) {
