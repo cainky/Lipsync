@@ -1,12 +1,11 @@
 # Lipsync
 
-A simple GUI app to synchronize recorded audio with video lip movements using the Wav2Lip model.
+A simple GUI app to synchronize recorded audio with video lip movements using the Wav2Lip-HQ model.
 
 ## Features
 
-- **Audio Recording**: Record your own audio directly from the app.
-- **Video Upload**: Upload a video of your choice.
-- **Lip Synchronization**: Apply the audio recording to the video to make the lips match the speech.
+- **Live Recording**: Record your own audio and video directly from the app.
+- **Lip Synchronization**: Automatically apply the audio recording to the video to make the lips match the speech.
 
 ## Installation
 
@@ -20,21 +19,33 @@ A simple GUI app to synchronize recorded audio with video lip movements using th
    cd Lipsync
    ```
 
-3. Install the required packages (assuming you have Python already installed):
+3. Install Poetry and the required packages for the backend (assuming you have Python already installed):
    ```bash
+   cd backend
+   curl -sSL https://install.python-poetry.org | python3 -
    poetry install
    ```
-
-4. Run the app:
+   
+4. Run the backend app:
    ```bash
-   poetry run main.py
+   poetry run app.py
+   ```
+   
+5. Install the required packages for the frontend (assuming you have npm already installed)
+   ```bash
+   cd ../frontend
+   npm install
+   ```
+6. Run the frontend app:
+   ```bash
+   npm run dev
    ```
 
 ## Usage
 
 1. **Record Audio**: Click the 'Record Audio' button and speak into your microphone.
 2. **Record Video**: Click the 'Record Video' button and record a video clip.
-3. **Sync**: Click the 'Sync' button and wait for the process to complete. Your output video will be saved in the 'outputs' directory.
+3. **Merge Recordings**: Click the 'Merge Recordings' button and wait for the process to complete. Your output video will be appear when it's ready.
 
 ## License
 
