@@ -2,7 +2,7 @@
 FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-runtime
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /backend
 
 # Install system dependencies and clean up
 RUN apt-get update && apt-get install -y git wget && \
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y git wget && \
 RUN git clone https://github.com/Markfryazino/wav2lip-hq.git
 
 # Change to the Wav2Lip-HQ directory
-WORKDIR /app/wav2lip-hq
+WORKDIR /backend/wav2lip-hq
 
 # Install Python dependencies
 RUN pip install gdown && \
@@ -35,7 +35,7 @@ RUN mkdir -p videos results
 
 # Install backend dependencies
 RUN pip3 install poetry
-COPY backend/ /backend/
+COPY backend /backend
 WORKDIR /backend
 RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
 

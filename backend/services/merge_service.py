@@ -20,11 +20,11 @@ def merge_audio_video(audio_file, video_file):
         run_wav2lip_inference(
             face_path=video_path, audio_path=audio_path, outfile_path=output_path
         )
-    except Exception:
+    except Exception as e:
         if os.path.exists(audio_path):
             os.remove(audio_path)
         if os.path.exists(video_path):
             os.remove(video_path)
-        raise
+        raise Exception("Output video not found after processing. Error: " + str(e))
 
     return output_path
