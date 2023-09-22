@@ -51,18 +51,6 @@ def run_wav2lip_inference(face_path, audio_path, outfile_path):
     audio_path = convert_to_wav(audio_path)
     face_path = convert_to_mp4(face_path)
 
-    # DEBUG TEMP
-    trimmed_face_path = os.path.join(get_uploads_dir(), "trimmed_face.mp4")
-    trimmed_audio_path = os.path.join(get_uploads_dir(), "trimmed_audio.wav")
-    trim_video(face_path, trimmed_face_path, 0, 5)
-    trim_audio(audio_path, trimmed_audio_path, 0, 5)
-    face_path = trimmed_face_path
-    audio_path = trimmed_audio_path
-    print("Starting Wav2Lip inference...")
-    print(f"Face file: {face_path}")
-    print(f"Audio file: {audio_path}")
-    print(f"Expected output file: {outfile_path}")
-
     cmd = [
         "python",
         "inference.py",
@@ -87,38 +75,3 @@ def run_wav2lip_inference(face_path, audio_path, outfile_path):
         raise Exception(f"Output video not found after processing. Error: {error_msg}")
 
     return outfile_path
-
-
-# DEBUG TEMP
-def trim_audio(input_audio_path, output_audio_path, start_time, duration):
-    cmd = [
-        "ffmpeg",
-        "-y",
-        "-i",
-        input_audio_path,
-        "-ss",
-        str(start_time),
-        "-t",
-        str(duration),
-        output_audio_path,
-    ]
-    subprocess.run(cmd, text=True)
-
-
-def trim_video(input_video_path, output_video_path, start_time, duration):
-    cmd = [
-        "ffmpeg",
-        "-y",
-        "-i",
-        input_video_path,
-        "-ss",
-        str(start_time),
-        "-t",
-        str(duration),
-        "-c:v",
-        "libx264",
-        "-c:a",
-        "aac",
-        output_video_path,
-    ]
-    subprocess.run(cmd, text=True)

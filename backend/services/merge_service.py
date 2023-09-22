@@ -21,7 +21,6 @@ def merge_audio_video(audio_file, video_file):
             face_path=video_path, audio_path=audio_path, outfile_path=output_path
         )
     except Exception:
-        # Cleanup in case of failure
         if os.path.exists(audio_path):
             os.remove(audio_path)
         if os.path.exists(video_path):

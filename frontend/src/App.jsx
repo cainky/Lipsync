@@ -81,17 +81,18 @@ function App() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            
+            setMergeSuccess(true);
             console.log("Backend Response:", response.data);
             setMergedVideoURL(BACKEND_URL+response.data.videoPath);
 
             if(progressInterval) clearInterval(progressInterval);  
             setProgress(0);
             setShowProgressBar(false);
-            setMergeSuccess(true);
     
             // Revoke the blob URLs after successful upload to free up memory
-            URL.revokeObjectURL(audioURL);
-            URL.revokeObjectURL(videoURL);
+            // URL.revokeObjectURL(audioURL);
+            // URL.revokeObjectURL(videoURL);
         } catch (error) {
             console.error("Error during merging:", error);
             if(progressInterval) clearInterval(progressInterval);
