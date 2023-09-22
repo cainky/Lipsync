@@ -1,0 +1,50 @@
+# Use an official CUDA-enabled PyTorch image as the base image
+FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-runtime
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y git wget
+
+# Clone the Wav2Lip-HQ repository
+RUN git clone https://github.com/Markfryazino/wav2lip-hq.git
+
+# Change to the Wav2Lip-HQ directory
+WORKDIR /app/wav2lip-hq
+
+# Install Python dependencies
+RUN pip install gdown
+RUN pip install -r requirements.txt
+
+# Download face detection model
+RUN mkdir -p face_detection/detection/sfd
+RUN wget "https://www.adrianbulat.com/downloads/python-fan/s3fd-619a316812.pth" -O "face_detection/detection/sfd/s3fd.pth"
+
+# Create directory for checkpoints
+RUN mkdir -p checkpoints
+
+# Copy the download models script and run it
+COPY download_models.py .
+RUN chmod +x download_models.py
+RUN python download_models.py
+
+# Create directories for input and output videos
+RUN mkdir -p videos results
+
+# Install backend dependencies
+RUN pip3 install poetry
+
+# Copy backend files and install its dependencies
+COPY pyproject.toml poetry.lock /backend/
+WORKDIR /backend
+RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
+
+# Copy all backend code
+COPY . /backend/
+
+# Set the entrypoint to the Flask app
+ENTRYPOINT ["python", "/backend/app.py"]
+
+# Expose the default port for Flask
+EXPOSE 5000

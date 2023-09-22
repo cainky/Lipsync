@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  wav2liphq:
+    build:
+      context: .
+      dockerfile: Dockerfile.wav2liphq
+    volumes:
+      - data-volume:/app/wav2lip-hq
+      
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - data-volume:/backend/uploads
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile.frontend
+    ports:
+      - "3000:3000"
+
+volumes:
+  data-volume:
