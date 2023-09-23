@@ -4,15 +4,20 @@ FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-runtime
 # Set the working directory in the container
 WORKDIR /backend
 
-# Install backend dependencies
-RUN pip install poetry
-COPY backend .
-RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
-
-# Install system dependencies and clean up
+# Install system dependencies
 RUN apt-get update && apt-get install -y git wget && \
     rm -rf /var/lib/apt/lists/*
 
+# Install backend dependencies
+RUN pip install poetry
+
+COPY backend/pyproject.toml backend/poetry.lock ./
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi && \
+    pip list
+    
+# Copy the rest of the backend
+COPY backend .
 
 # Change to the Wav2Lip-HQ directory
 WORKDIR /backend/wav2lip-hq
