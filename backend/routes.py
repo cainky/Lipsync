@@ -1,5 +1,5 @@
 import os
-from flask import jsonify, request, send_from_directory
+from flask import jsonify, request, Response
 from pathlib import Path
 from services.merge_service import merge_audio_video
 from utils import get_uploads_dir
@@ -14,7 +14,15 @@ def allowed_file(filename):
 def init_app(app):
     @app.route("/uploads/<filename>", methods=["GET"])
     def uploaded_file(filename):
-        return send_from_directory(get_uploads_dir(), filename)
+        uploads_dir = get_uploads_dir()
+        filepath = os.path.join(uploads_dir, filename)
+
+        try:
+            with open(filepath, "rb") as f:
+                file_content = f.read()
+            return Response(file_content, content_type="video/webm")
+        except FileNotFoundError:
+            return jsonify(error="File not found"), 404
 
     @app.route("/api/merge", methods=["POST"])
     def merge():

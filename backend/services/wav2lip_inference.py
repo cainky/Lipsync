@@ -8,10 +8,9 @@ SR_PATH = os.path.join("checkpoints", "esrgan_max.pth")
 
 
 def run_command(cmd, workdir=None):
-    if workdir:
-        result = subprocess.run(cmd, text=True, cwd=workdir)
-    else:
-        result = subprocess.run(cmd, text=True)
+    result = subprocess.run(
+        cmd, text=True, cwd=workdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     if result.returncode != 0:
         raise Exception(
             f"Command {cmd[0]} failed with return code {result.returncode}."
