@@ -16,6 +16,8 @@ services:
       dockerfile: frontend/docker/Dockerfile.frontend
     ports:
       - "3000:80"
+    environment:
+      - BACKEND_URL=http://backend:5000
 
 volumes:
   data-volume:
