@@ -19,24 +19,26 @@ A simple GUI app to synchronize recorded audio with video lip movements using th
    cd Lipsync
    ```
 
-3. Install Poetry and the required packages for the backend (assuming you have Python already installed):
+3. Make sure you put the necessary model files into backend/wav2lip-hq/checkpoints as described in the [wav2lip-hq directory](https://github.com/Markfryazino/wav2lip-hq)
+
+4. Install Poetry and the required packages for the backend (assuming you have Python already installed):
    ```bash
    cd backend
    curl -sSL https://install.python-poetry.org | python3 -
    poetry install
    ```
    
-4. Run the backend app:
+5. Run the backend app:
    ```bash
    poetry run app.py
    ```
    
-5. Install the required packages for the frontend (assuming you have npm already installed)
+6. Install the required packages for the frontend (assuming you have npm already installed)
    ```bash
    cd ../frontend
    npm install
    ```
-6. Run the frontend app:
+7. Run the frontend app:
    ```bash
    npm run dev
    ```
