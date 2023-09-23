@@ -1,4 +1,4 @@
-import unittest, os
+import unittest, os, subprocess
 from unittest.mock import patch, MagicMock
 from services.wav2lip_inference import (
     run_wav2lip_inference,
@@ -24,10 +24,16 @@ class TestWav2LipInference(unittest.TestCase):
         if os.path.exists(self.outfile):
             os.remove(self.outfile)
 
-    @patch("services.wav2lip_inference.os.path.exists", return_value=True)
     @patch("services.wav2lip_inference.os.remove")
+    @patch(
+        "services.wav2lip_inference.os.path.join",
+        side_effect=lambda *args: "/".join(args),
+    )
+    @patch("os.path.exists", return_value=True)
     @patch("subprocess.run")
-    def test_successful_inference(self, mock_run, mock_remove, mock_exists):
+    def test_wav2lip_inference_successful(
+        self, mock_run, mock_exists, mock_path_join, mock_remove
+    ):
         mock_run.return_value = MagicMock(returncode=0)
 
         output_path = run_wav2lip_inference(self.face, self.audio, self.outfile)
@@ -65,7 +71,7 @@ class TestWav2LipInference(unittest.TestCase):
 
     @patch("os.path.exists", return_value=False)
     @patch("subprocess.run")
-    def test_inference_output_not_found(self, mock_run, mock_exists):
+    def test_wav2lip_inference_output_not_generated(self, mock_run, mock_exists):
         mock_run.return_value = MagicMock(returncode=0)
 
         with self.assertRaises(Exception) as context:
@@ -77,7 +83,7 @@ class TestWav2LipInference(unittest.TestCase):
 
     @patch("os.path.exists", return_value=True)
     @patch("subprocess.run")
-    def test_inference_processing_failed(self, mock_run, mock_exists):
+    def test_wav2lip_inference_processing_error(self, mock_run, mock_exists):
         mock_run.return_value = MagicMock(returncode=1, stderr="Error in Wav2Lip")
 
         with self.assertRaises(Exception) as context:
@@ -85,6 +91,19 @@ class TestWav2LipInference(unittest.TestCase):
 
         self.assertTrue(
             "Command ffmpeg failed with return code 1." in str(context.exception)
+        )
+
+    @patch("os.path.exists", return_value=True)
+    @patch(
+        "subprocess.run",
+        side_effect=[subprocess.CalledProcessError(1, "ffmpeg"), None, None],
+    )
+    def test_audio_conversion_error(self, mock_run, mock_exists):
+        with self.assertRaises(Exception) as context:
+            run_wav2lip_inference(self.face, self.audio, self.outfile)
+        raised_exception = context.exception
+        self.assertIn(
+            "Command 'ffmpeg' returned non-zero exit status", str(raised_exception)
         )
 
 
