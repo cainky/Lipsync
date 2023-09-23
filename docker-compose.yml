@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: frontend/docker/Dockerfile.frontend
     ports:
-      - "3000:3000"
+      - "3000:80"
 
 volumes:
   data-volume:

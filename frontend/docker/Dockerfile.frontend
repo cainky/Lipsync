@@ -1,11 +1,12 @@
 # Use the official Node.js 14 image from DockerHub
-FROM node:14 as build-stage
+FROM node:16 as build-stage
 
 # Set the working directory
 WORKDIR /frontend
 
 # Copy the `package.json` and `package-lock.json`
 COPY frontend/package*.json ./
+COPY frontend/nginx/nginx.conf /etc/nginx/conf.d/
 
 # Install the project dependencies and clear npm cache for a smaller image
 RUN npm install && npm cache clean --force
@@ -21,6 +22,7 @@ FROM nginx:alpine
 
 # Copy the build from the previous image
 COPY --from=build-stage /frontend/dist /usr/share/nginx/html
+
 
 # Expose port 80 for the app
 EXPOSE 80
