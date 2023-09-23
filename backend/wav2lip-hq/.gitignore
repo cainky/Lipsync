@@ -1,2 +1,3 @@
 checkpoints/*.pth
-temp/*
+temp/*.avi
+face_detection/detection/sfd/*.pth

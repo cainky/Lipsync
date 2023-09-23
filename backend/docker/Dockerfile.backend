@@ -22,16 +22,20 @@ RUN pip install gdown && \
     pip install -r requirements.txt
 
 # Download face detection model
-RUN mkdir -p face_detection/detection/sfd && \
-    wget "https://www.adrianbulat.com/downloads/python-fan/s3fd-619a316812.pth" -O "face_detection/detection/sfd/s3fd.pth"
+RUN if [ ! -f "face_detection/detection/sfd/s3fd.pth" ]; then \
+        mkdir -p face_detection/detection/sfd && \
+        wget "https://www.adrianbulat.com/downloads/python-fan/s3fd-619a316812.pth" -O "face_detection/detection/sfd/s3fd.pth"; \
+    fi
 
 # Create directory for checkpoints
 RUN mkdir -p checkpoints
 
-# Copy the download models script and run it
-COPY backend/docker/download_models.py .
-RUN chmod +x download_models.py && \
-    python download_models.py
+RUN if [ ! -f "checkpoints/wav2lip_gan.pth" ] || [ ! -f "checkpoints/face_segmentation.pth" ] || [ ! -f "checkpoints/esrgan_max.pth" ]; then \
+        # Copy the download models script and run it
+        COPY backend/docker/download_models.py . \
+        RUN chmod +x download_models.py && \
+        python download_models.py; \
+    fi
 
 # Create directories for input and output videos
 RUN mkdir -p videos results
