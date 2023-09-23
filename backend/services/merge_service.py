@@ -35,6 +35,6 @@ def merge_audio_video(audio_file, video_file):
         )
     except Exception as e:
         clean_files(audio_path, video_path)
-        raise Exception("Output video not found after processing. Error: " + str(e))
+        raise Exception("Error: " + str(e))
 
     return output_path

@@ -12,10 +12,12 @@ def run_command(cmd, workdir=None):
         cmd, text=True, cwd=workdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     if result.returncode != 0:
-        raise Exception(
-            f"Command {cmd[0]} failed with return code {result.returncode}."
-        )
+        error_details = f"Command '{' '.join(cmd)}' failed with return code {result.returncode}. "
+        error_details += f"STDOUT: {result.stdout} "
+        error_details += f"STDERR: {result.stderr}"
+        raise Exception(error_details)
     return result
+
 
 
 def convert_webm_to_wav(input_path, output_path):
@@ -71,6 +73,6 @@ def run_wav2lip_inference(face_path, audio_path, outfile_path):
 
     if not os.path.exists(outfile_path):
         error_msg = result.stderr if result.stderr else result.stdout
-        raise Exception(f"Output video not found after processing. Error: {error_msg}")
+        raise Exception(f"Error: {error_msg}")
 
     return outfile_path

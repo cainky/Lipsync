@@ -1,5 +1,8 @@
 import gdown
 
+base_directory = "/backend/wav2lip-hq/"
+checkpoints_directory = base_directory + "checkpoints/"
+
 urls = {
     "wav2lip_gan.pth": "10Iu05Modfti3pDbxCFPnofmfVlbkvrCm",
     "face_segmentation.pth": "154JgKpzCPW82qINcVieuPH3fZ2e0P812",
@@ -8,6 +11,6 @@ urls = {
 
 for name, id in urls.items():
     url = f"https://drive.google.com/uc?id={id}"
-    output = f"checkpoints/{name}"
+    output = checkpoints_directory + name
     gdown.download(url, output, quiet=False)
     print(f"Loaded {name}")

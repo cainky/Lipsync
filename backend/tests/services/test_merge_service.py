@@ -63,7 +63,7 @@ class TestMergeService(unittest.TestCase):
         mock_run.return_value = MagicMock(returncode=1, stderr="Error in Wav2Lip")
 
         with self.assertRaisesRegex(
-            Exception, "Output video not found after processing"
+            Exception, "Error:"
         ):
             merge_service.merge_audio_video(
                 self.sample_audio_file, self.sample_video_file

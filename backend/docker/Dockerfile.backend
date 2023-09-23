@@ -5,13 +5,13 @@ FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-runtime
 WORKDIR /backend
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y git wget && \
+RUN apt-get update && apt-get install -y git wget libgl1-mesa-glx libglib2.0-0 libsndfile1 && \
     rm -rf /var/lib/apt/lists/*
 
 # Install backend dependencies
 RUN pip install poetry
 
-COPY backend/pyproject.toml backend/poetry.lock ./
+COPY /backend/pyproject.toml /backend/poetry.lock ./
 RUN poetry config virtualenvs.create false && \
     poetry install --no-interaction --no-ansi && \
     pip list

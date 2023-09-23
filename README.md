@@ -47,7 +47,11 @@ A simple GUI app to synchronize recorded audio with video lip movements using th
 - In the root project directory, run
 ```bash
 docker-compose build
+docker-compose up
 ```
+
+- Frontend container is at http://localhost:3000
+- Backend container is at http://localhost:5000
 
 
 ## Usage
