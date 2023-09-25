@@ -1,6 +1,6 @@
 addict
 future
-librosa==0.7.0
+librosa==0.10.1
 lmdb
 numba==0.48
 numpy
