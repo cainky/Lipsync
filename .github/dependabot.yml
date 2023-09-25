@@ -14,3 +14,6 @@ updates:
     directory: "/backend"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "*"
+        directory: "/backend/wav2lip-hq"
