@@ -79,7 +79,7 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(response.json["error"], "File type not allowed")
 
     def test_merge_error_during_process(self):
-        error_msg_prefix = "Error:"
+        error_msg_prefix = "An internal error has occurred!"
 
         with patch(
             "services.merge_service.merge_audio_video",

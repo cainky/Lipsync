@@ -1,8 +1,9 @@
-import os
+import os, logging
 from flask import jsonify, request, Response
 from pathlib import Path
 from services.merge_service import merge_audio_video
 from utils import get_uploads_dir
+from werkzeug.utils import secure_filename
 
 ALLOWED_EXTENSIONS = {"mp4", "wav", "webm"}
 
@@ -14,11 +15,16 @@ def allowed_file(filename):
 def init_app(app):
     @app.route("/uploads/<filename>", methods=["GET"])
     def uploaded_file(filename):
+        
+        filename = secure_filename(filename)
         uploads_dir = get_uploads_dir()
-        filepath = os.path.join(uploads_dir, filename)
-
+        fullpath = os.path.normpath(os.path.join(uploads_dir, filename))
+    
+        if not fullpath.startswith(uploads_dir):
+            return jsonify(error="Access denied"), 403
+        
         try:
-            with open(filepath, "rb") as f:
+            with open(fullpath, "rb") as f:
                 file_content = f.read()
             return Response(file_content, content_type="video/webm")
         except FileNotFoundError:
@@ -55,5 +61,6 @@ def init_app(app):
                         404,
                     )
             except Exception as e:
-                return jsonify(error=str(e)), 500
+                logging.error(f"An error occurred: {str(e)}")
+                return jsonify(error="An internal error has occurred!"), 500
         return jsonify(error="File type not allowed"), 400
