@@ -1,6 +1,7 @@
 import os
+from flask import current_app
 from services.wav2lip_inference import run_wav2lip_inference
-from utils import get_uploads_dir
+from utils import get_uploads_dir, get_full_path
 
 DEFAULT_AUDIO_FILENAME = "audio.webm"
 DEFAULT_VIDEO_FILENAME = "face.webm"
@@ -8,9 +9,9 @@ DEFAULT_OUTPUT_FILENAME = "output.mp4"
 
 
 def save_files(audio_file, video_file):
-    uploads_dir = get_uploads_dir()
-    audio_path = os.path.join(uploads_dir, DEFAULT_AUDIO_FILENAME)
-    video_path = os.path.join(uploads_dir, DEFAULT_VIDEO_FILENAME)
+    uploads_dir = get_uploads_dir(current_app.config)
+    audio_path = get_full_path(uploads_dir, DEFAULT_AUDIO_FILENAME)
+    video_path = get_full_path(uploads_dir, DEFAULT_VIDEO_FILENAME)
 
     audio_file.save(audio_path)
     video_file.save(video_path)
@@ -27,8 +28,9 @@ def clean_files(audio_path, video_path):
 
 def merge_audio_video(audio_file, video_file):
     audio_path, video_path = save_files(audio_file, video_file)
-    output_path = os.path.join(get_uploads_dir(), DEFAULT_OUTPUT_FILENAME)
-
+    output_path = get_full_path(
+        get_uploads_dir(current_app.config), DEFAULT_OUTPUT_FILENAME
+    )
     try:
         run_wav2lip_inference(
             face_path=video_path, audio_path=audio_path, outfile_path=output_path

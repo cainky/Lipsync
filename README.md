@@ -7,7 +7,7 @@ A simple GUI app to synchronize recorded audio with video lip movements using th
 - **Live Recording**: Record your own audio and video directly from the app.
 - **Lip Synchronization**: Automatically apply the audio recording to the video to make the lips match the speech.
 
-## Installation
+<!-- ## Installation
 
 1. Clone the repository:
    ```bash
@@ -21,27 +21,49 @@ A simple GUI app to synchronize recorded audio with video lip movements using th
 
 3. Make sure you put the necessary model files into backend/wav2lip-hq/checkpoints as described in the [wav2lip-hq directory](https://github.com/Markfryazino/wav2lip-hq)
 
-4. Install Poetry and the required packages for the backend (assuming you have Python already installed):
+4. Make sure to create a Python 3.7 virtual environment for wav2lip-hq using the following steps:
+```bash
+cd backend/wav2lip-hq
+```
+```bash
+pyenv install 3.7.0
+pyenv local 3.7.0
+python -m venv wav2lipenv
+```
+
+5. Install the requirements in the virtualenv
+```bash
+wav2lipenv/bin/python -m pip install -r requirements.txt
+```
+
+6. Change directory back to backend, install Poetry and the required packages for the backend (assuming you have Python already installed):
    ```bash
-   cd backend
+   deactivate
+   cd ..
    curl -sSL https://install.python-poetry.org | python3 -
    poetry install
    ```
    
-5. Run the backend app:
+7. Run the backend app:
    ```bash
    poetry run app.py
    ```
    
-6. Install the required packages for the frontend (assuming you have npm already installed)
+8. Install the required packages for the frontend (assuming you have npm already installed)
    ```bash
    cd ../frontend
    npm install
    ```
-7. Run the frontend app:
+9. Make an .env file. You can copy the .env.example file and rename it to .env as a starting point
+
+10. Run the frontend app:
    ```bash
+   npm run build
    npm run dev
    ```
+
+Frontend will be at http://localhost:5173
+Backend will be at http://localhost:5000 -->
 
 ## Docker
 - In the root project directory, run
