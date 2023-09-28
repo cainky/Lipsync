@@ -1,7 +1,7 @@
 from __init__ import create_app
 from flask import jsonify
 
-app = create_app()
+app = create_app(config="production")
 
 
 @app.route("/")

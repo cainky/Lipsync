@@ -1,16 +1,20 @@
 from flask import Flask
 from flask_cors import CORS
-import os
+from config import Config, DevelopmentConfig, TestingConfig, ProductionConfig
 
 
-def create_app():
+def create_app(config="default"):
     app = Flask(__name__)
     CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    UPLOADS_DIR = os.path.join(BASE_DIR, "uploads")
-    app.config["BASE_DIR"] = BASE_DIR
-    app.config["UPLOADS_DIR"] = UPLOADS_DIR
+    configurations = {
+        "default": Config,
+        "development": DevelopmentConfig,
+        "testing": TestingConfig,
+        "production": ProductionConfig,
+    }
+
+    app.config.from_object(configurations[config])
 
     # Register routes
     from routes import init_app as init_routes

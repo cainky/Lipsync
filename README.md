@@ -7,7 +7,7 @@ A simple GUI app to synchronize recorded audio with video lip movements using th
 - **Live Recording**: Record your own audio and video directly from the app.
 - **Lip Synchronization**: Automatically apply the audio recording to the video to make the lips match the speech.
 
-## Installation
+<!-- ## Installation
 
 1. Clone the repository:
    ```bash
@@ -63,7 +63,7 @@ wav2lipenv/bin/python -m pip install -r requirements.txt
    ```
 
 Frontend will be at http://localhost:5173
-Backend will be at http://localhost:5000
+Backend will be at http://localhost:5000 -->
 
 ## Docker
 - In the root project directory, run

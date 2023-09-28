@@ -1,5 +1,5 @@
 import os, logging
-from flask import jsonify, request, Response
+from flask import jsonify, request, Response, current_app
 from pathlib import Path
 from services.merge_service import merge_audio_video
 from utils import get_uploads_dir, get_full_path
@@ -16,7 +16,7 @@ def init_app(app):
     @app.route("/uploads/<filename>", methods=["GET"])
     def uploaded_file(filename):
         filename = secure_filename(filename)
-        uploads_dir = get_uploads_dir()
+        uploads_dir = get_uploads_dir(current_app.config)
         fullpath = get_full_path(uploads_dir, filename)
 
         if not fullpath.startswith(uploads_dir):

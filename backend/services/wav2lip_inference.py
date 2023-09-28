@@ -1,9 +1,11 @@
-import os, sys, subprocess
-from utils import get_checkpoints_dir, get_full_path, get_wav2lip_env_dir
-
-CHECKPOINT_PATH = os.path.join("checkpoints", "wav2lip_gan.pth")
-SEGMENTATION_PATH = os.path.join("checkpoints", "face_segmentation.pth")
-SR_PATH = os.path.join("checkpoints", "esrgan_max.pth")
+import os, subprocess
+from flask import current_app
+from utils import (
+    get_checkpoints_dir,
+    get_full_path,
+    get_wav2lip_env_dir,
+    get_python_executable,
+)
 
 
 def run_command(cmd, workdir=None):
@@ -48,22 +50,14 @@ def convert_to_mp4(face_path):
     return face_path
 
 
-def get_python_executable():
-    wav2lip_env_dir = get_wav2lip_env_dir()
-    if sys.platform.startswith("win"):
-        python_path = wav2lip_env_dir + "/Scripts"
-    else:
-        python_path = wav2lip_env_dir + "/bin"
-    return get_full_path(python_path, "python")
-
-
 def run_wav2lip_inference(face_path, audio_path, outfile_path):
-    checkpoint_dir = get_checkpoints_dir()
+    checkpoint_dir = get_checkpoints_dir(current_app.config)
     CHECKPOINT_PATH = get_full_path(checkpoint_dir, "wav2lip_gan.pth")
     SEGMENTATION_PATH = get_full_path(checkpoint_dir, "face_segmentation.pth")
     SR_PATH = get_full_path(checkpoint_dir, "esrgan_max.pth")
 
-    python_executable = get_python_executable()
+    wav2lip_env_dir = get_wav2lip_env_dir(current_app.config)
+    python_executable = get_python_executable(wav2lip_env_dir)
 
     audio_path = convert_to_wav(audio_path)
     face_path = convert_to_mp4(face_path)
