@@ -1,53 +1,45 @@
 # Use an official CUDA-enabled PyTorch image as the base image
 FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-runtime
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Set the working directory in the container
 WORKDIR /backend
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y git wget libgl1-mesa-glx libglib2.0-0 libsndfile1 && \
+# Install system dependencies and Python 3.7
+RUN apt-get update && apt-get install -y git wget libgl1-mesa-glx libglib2.0-0 libsndfile1 curl python3.7 python3-pip && \
     rm -rf /var/lib/apt/lists/*
 
-# Install backend dependencies
+# Install poetry
 RUN pip install poetry
 
-COPY /backend/pyproject.toml /backend/poetry.lock ./
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi && \
-    pip list
-    
-# Copy the rest of the backend
-COPY backend .
+# Copy the poetry configuration files for the Flask app
+COPY backend/pyproject.toml backend/poetry.lock /backend/
 
-# Change to the Wav2Lip-HQ directory
+# Install backend dependencies using poetry
+RUN poetry config virtualenvs.create true && \
+    poetry install --no-interaction --no-ansi
+
+# Copy the entire backend directory
+COPY backend/ .
+
+# Install Python 3.7 virtual environment
+RUN python3.7 -m pip install virtualenv
+
+# Create a virtual environment for wav2lip with Python 3.7
+RUN python3.7 -m virtualenv /backend/wav2lip-hq/wav2lipenv
+# Activate the wav2lip virtual environment for wav2lip requirements
+ENV PATH="/backend/wav2lip-hq/wav2lipenv/bin:$PATH"
+
+# Navigate to wav2lip-hq and install its dependencies
 WORKDIR /backend/wav2lip-hq
+RUN pip install gdown
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-RUN pip install gdown && \
-    pip install -r requirements.txt
-
-# Download face detection model
-RUN if [ ! -f "face_detection/detection/sfd/s3fd.pth" ]; then \
-        mkdir -p face_detection/detection/sfd && \
-        wget "https://www.adrianbulat.com/downloads/python-fan/s3fd-619a316812.pth" -O "face_detection/detection/sfd/s3fd.pth"; \
-    fi
-
-# Create directory for checkpoints
-RUN mkdir -p checkpoints
-
-RUN if [ ! -f "checkpoints/wav2lip_gan.pth" ] || [ ! -f "checkpoints/face_segmentation.pth" ] || [ ! -f "checkpoints/esrgan_max.pth" ]; then \
-        # Copy the download models script and run it
-        COPY backend/docker/download_models.py . \
-        RUN chmod +x download_models.py && \
-        python download_models.py; \
-    fi
-
-# Create directories for input and output videos
-RUN mkdir -p videos results
-
-# Set the entrypoint to the Flask app
+# Return to the main backend directory
 WORKDIR /backend
-ENTRYPOINT ["python", "app.py"]
+
+# Set the entry point to run the Flask app with the poetry environment
+ENTRYPOINT ["poetry", "run", "python", "app.py"]
 
 # Expose the default port for Flask
 EXPOSE 5000

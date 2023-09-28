@@ -2,6 +2,7 @@ uploads/*.webm
 uploads/*.wav
 uploads/*.mp4
 uploads/*.avi
+wav2lip-hq/wav2lipenv/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

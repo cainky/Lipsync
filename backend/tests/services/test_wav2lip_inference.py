@@ -52,7 +52,7 @@ class TestWav2LipInference(unittest.TestCase):
 
         # Verify inference call
         inference_cmd = [
-            "python",
+            "/wav2lipenv/bin/python",
             "inference.py",
             "--face",
             "test_video.mp4",
@@ -88,11 +88,13 @@ class TestWav2LipInference(unittest.TestCase):
 
         with self.assertRaises(Exception) as context:
             run_wav2lip_inference(self.face, self.audio, self.outfile)
-            
-        self.assertTrue(str(context.exception).startswith(f"Command 'ffmpeg -y -i test_audio.webm test_audio.wav' failed with return code 1."))
+
+        self.assertTrue(
+            str(context.exception).startswith(
+                f"Command 'ffmpeg -y -i test_audio.webm test_audio.wav' failed with return code 1."
+            )
+        )
         self.assertTrue("Error in Wav2Lip" in str(context.exception))
-
-
 
     @patch("os.path.exists", return_value=True)
     @patch(

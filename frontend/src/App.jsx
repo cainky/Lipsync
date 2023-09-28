@@ -4,7 +4,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import ProgressBar from './components/ProgressBar';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = import.meta.env.BACKEND_URL || 'http://localhost:5000';
 
 function App() {
     const [activeRecorder, setActiveRecorder] = useState(null);
@@ -20,8 +20,6 @@ function App() {
     const [errorMessage, setErrorMessage] = useState(null);
     const [progress, setProgress] = useState(0);
     const [showProgressBar, setShowProgressBar] = useState(false);
-
-
 
     useEffect(() => {
         // Cleanup function

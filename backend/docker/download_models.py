@@ -1,7 +1,6 @@
 import gdown
 
-base_directory = "/backend/wav2lip-hq/"
-checkpoints_directory = base_directory + "checkpoints/"
+checkpoints_directory = "/backend/wav2lip-hq/checkpoints/"
 
 urls = {
     "wav2lip_gan.pth": "10Iu05Modfti3pDbxCFPnofmfVlbkvrCm",
