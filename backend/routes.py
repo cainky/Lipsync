@@ -61,6 +61,5 @@ def init_app(app):
                     )
             except Exception as e:
                 logging.error(f"An error occurred: {str(e)}")
-                # return jsonify(error=f"An internal error has occurred!"), 500
-                return jsonify(error=f"An internal error has occurred! {str(e)}"), 500
+                return jsonify(error=f"An internal error has occurred!"), 500
         return jsonify(error="File type not allowed"), 400
